@@ -1,0 +1,40 @@
+---
+title: "Essay"
+author: '11484265'
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Overview (10%)
+-mort patterns by age and over time in both sexes (4 graphs total, take from presentation)
+
+
+# Forecasts (50%)
+-split into train and forecast data
+--75% would be until ~1998, ok for long term, but may not capture recent shifts, so decided 2010
+--opiod crisis in 2016
+--covid
+--babyboomer first wave retire 2011
+--choose 2012 (leave 10y of test data)
+
+## Log-Linear Model
+- show results
+
+## Lee-Carter Model
+- show results
+
+## Quality of Estimates
+- present assessment 
+- issues during modelling? solutions?
+- compare quality in sexes
+
+
+# Challenges (40%)
+## short-term (5y)
+
+## long-term (30-50y)
