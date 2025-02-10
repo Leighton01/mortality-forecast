@@ -6,12 +6,27 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(HMDHFDplus)
+library(viridis)
+library(rstan)
+
+source('overview.R')
+source('models.R')
 ```
 
 
 # Overview (10%)
--mort patterns by age and over time in both sexes (4 graphs total, take from presentation)
+-mort patterns by age and over time in both sexes (2 graphs total)
+```{r setup}
+
+mort_over_f
+mort_over_m
+
+```
+
 
 
 # Forecasts (50%)
@@ -20,21 +35,111 @@ knitr::opts_chunk$set(echo = TRUE)
 --opiod crisis in 2016
 --covid
 --babyboomer first wave retire 2011
---choose 2012 (leave 10y of test data)
+--choose 2012 (leave 10y, 2013-2022 of test data), 
 
 ## Log-Linear Model
-- show results
+- forecast results
+
+###warnings
+Warning messages:
+1: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
+https://mc-stan.org/misc/warnings.html#bfmi-low 
+
+FIXED BY INCREASING adapt_delta FROM 0.97 TO 0.9999 and warm up to 2000
+
+for male all 4 chains have low BFMI but rhat is close to 1, so convergence is still good.
+No divergence warnings.
+Trace plots should show stationary, non-trending behavior.
+Density plots are smooth and unimodal (unless there are multiple modes in the posterior).
+
+2: Examine the pairs() plot to diagnose sampling problems
+ 
+3: The largest R-hat is 1.06, indicating chains have not mixed.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#r-hat 
+
+FIXED BY INCREASING ITER FROM 1500 TO 5000
+
+
+4: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess 
+
+FIXED BY INCREASING ITER FROM 1500 TO 6000
+increased chains to 4
+
+
+5: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess
+
+FIXED BY INCREASING ITER FROM 1500 TO 5000
 
 ## Lee-Carter Model
+- forecast results
+
+### warnings
+for BOTH SEXES 
+check that the rhat is only for ben (check traceplot converges for each parameter), and look at rhat values (how???)
+
+Warning messages:
+1: The largest R-hat is 1.53, indicating chains have not mixed.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#r-hat 
+2: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess 
+3: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess 
+
+
 - show results
 
 ## Quality of Estimates
-- present assessment 
-- issues during modelling? solutions?
-- compare quality in sexes
+- graphs of convergence of each parameter 
+- graph of rhat?
+- forecasts of all age groups compared to actual (lc and ln, so 4 graphs total)
+```{r}
+gg_mort_f
+gg_mort_m
+```
+
+- forecastts of life expectancy (age v year, median, lc and ln, 4 graphs total)
+
+```{r}
+
+```
+
+
+
+#### compare quality (numbers)
+
+Using mean of kf (posterior mort) since it's fiarly symmetrical/normal
+
+```{r}
+
+tab_me
+tab_mpe
+tab_mae
+tab_rmse
+tab_mape
+
+```
+
+
+using the 95% credible interval (columns 2.5% and 97.5% ), calculate the proportion of observed
+mortality rates in 2010-2019 that fall within the predictive intervals of the forecasts. Compare these
+measures between log-linear and Lee-Carter models.
+```{r}
+prop_within_ln_f
+prop_within_lc_f
+prop_within_ln_m
+prop_within_lc_m
+```
+
 
 
 # Challenges (40%)
 ## short-term (5y)
-
 ## long-term (30-50y)

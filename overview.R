@@ -19,7 +19,7 @@ ltm <- readHMDweb(CNTRY = "CAN",
                       password = "mFAT^L9^es34",
                       fixup = FALSE)
 
-
+mort_over_f <-
 ltf %>%
   mutate(lmx1=log10(mx),
          Age=as_factor(Age)) %>%
@@ -33,35 +33,32 @@ ltf %>%
        title="Average (over 1921-2022) female mortality")
 
 
-ltf %>%
-  mutate(lmx1=log10(mx),
-         Age=as_factor(Age)) %>%
-  group_by(Age) %>%
-  summarise(lmx_age=mean(lmx1)) %>%
-  ggplot() +
-  geom_line(aes(x=Age,y=lmx_age, group=1), size=1.2) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=90, vjust=0.5),
-        legend.position = "right") +
-  labs(y="log10(mortality rate)",
-       title="Average (over 1921-2022) female mortality")
+# ltf %>%
+#   mutate(lmx1=log10(mx),
+#          Age=as_factor(Age)) %>%
+#   group_by(Age) %>%
+#   summarise(lmx_age=mean(lmx1)) %>%
+#   ggplot() +
+#   geom_line(aes(x=Age,y=lmx_age, group=1), size=1.2) +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle=90, vjust=0.5),
+#         legend.position = "right") +
+#   labs(y="log10(mortality rate)",
+#        title="Average (over 1921-2022) female mortality")
 
 
-ltf %>%
-  mutate(lmx1=log10(mx),
-         Age=as_factor(Age)) %>%
-  group_by(Year) %>%
-  summarise(lmx_time=mean(lmx1)) %>%
-  ggplot() +
-  geom_line(aes(x=Year,y=lmx_time, group=1), size=1.2) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=90, vjust=0.5),
-        legend.position = "right") +
-  labs(y="log10(mortality rate)",
-       title="Average (over all age groups) female mortality")
-
-
-
+# ltf %>%
+#   mutate(lmx1=log10(mx),
+#          Age=as_factor(Age)) %>%
+#   group_by(Year) %>%
+#   summarise(lmx_time=mean(lmx1)) %>%
+#   ggplot() +
+#   geom_line(aes(x=Year,y=lmx_time, group=1), size=1.2) +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle=90, vjust=0.5),
+#         legend.position = "right") +
+#   labs(y="log10(mortality rate)",
+#        title="Average (over all age groups) female mortality")
 
 
 
@@ -72,6 +69,9 @@ ltf %>%
 
 
 
+
+
+mort_over_m <-
 ltm %>%
   mutate(lmx1=log10(mx),
          Age=as_factor(Age)) %>%
@@ -85,30 +85,30 @@ ltm %>%
        title="Average (over 1921-2022) male mortality")
 
 
-ltm %>%
-  mutate(lmx1=log10(mx),
-         Age=as_factor(Age)) %>%
-  group_by(Age) %>%
-  summarise(lmx_age=mean(lmx1)) %>%
-  ggplot() +
-  geom_line(aes(x=Age,y=lmx_age, group=1), size=1.2) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=90, vjust=0.5),
-        legend.position = "right") +
-  labs(y="log10(mortality rate)",
-       title="Average (over 1921-2022) male mortality")
-
-
-ltm %>%
-  mutate(lmx1=log10(mx),
-         Age=as_factor(Age)) %>%
-  group_by(Year) %>%
-  summarise(lmx_time=mean(lmx1)) %>%
-  ggplot() +
-  geom_line(aes(x=Year,y=lmx_time, group=1), size=1.2) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle=90, vjust=0.5),
-        legend.position = "right") +
-  labs(y="log10(mortality rate)",
-       title="Average (over all age groups) male mortality")
-
+# ltm %>%
+#   mutate(lmx1=log10(mx),
+#          Age=as_factor(Age)) %>%
+#   group_by(Age) %>%
+#   summarise(lmx_age=mean(lmx1)) %>%
+#   ggplot() +
+#   geom_line(aes(x=Age,y=lmx_age, group=1), size=1.2) +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle=90, vjust=0.5),
+#         legend.position = "right") +
+#   labs(y="log10(mortality rate)",
+#        title="Average (over 1921-2022) male mortality")
+#
+#
+# ltm %>%
+#   mutate(lmx1=log10(mx),
+#          Age=as_factor(Age)) %>%
+#   group_by(Year) %>%
+#   summarise(lmx_time=mean(lmx1)) %>%
+#   ggplot() +
+#   geom_line(aes(x=Year,y=lmx_time, group=1), size=1.2) +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle=90, vjust=0.5),
+#         legend.position = "right") +
+#   labs(y="log10(mortality rate)",
+#        title="Average (over all age groups) male mortality")
+#

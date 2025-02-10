@@ -1,8 +1,4 @@
-library(tidyverse)
-library(viridis)
-library(rstan)
 
-model_ln = "
 data {
 int<lower=0> N; //number of age groups
 int<lower=0> F; //forecast horizon
@@ -20,10 +16,29 @@ transformed parameters {
 }
 model {
 // Priors
-phi ~ normal(0,2);
+// phi ~ normal(0,2);
+
+// TRY
+phi ~ normal(0, 1);  // ✅ Tighter than normal(0,2), better mixing
+// phi ~ beta(2, 2) * 2 - 1;  // ✅ Keeps phi in (-1,1) range
+
 A ~ normal(0,5);
-sig[1] ~ normal(0,1); //remember it is >0 when defined
-sig[2] ~ normal(0,1); //remember it is >0 when defined
+
+// TRY
+// A ~ student_t(3, 0, 5);  // ✅ More robust than normal(0,5)
+// A ~ cauchy(0, 5);  // ⚠️ Heavy tails (use if needed)
+
+// sig[1] ~ normal(0,1)T[0,]; //remember it is >0 when defined
+// sig[2] ~ normal(0,1)T[0,]; //remember it is >0 when defined
+
+// TRY More robust heavy-tailed option
+// sig[1] ~ student_t(3, 0, 1);
+// sig[2] ~ student_t(3, 0, 1);
+
+// Common alternative for positive-only variables
+sig[1] ~ gamma(2, 1);
+sig[2] ~ gamma(2, 1);
+
 // Model for time effect
 k[1] ~ normal(phi, sig[2]);
 k[2:(T-1)] ~ normal(phi + k[1:(T-2)], sig[2]);
@@ -56,7 +71,7 @@ mdf[a,1] = normal_rng(A[a], sig[1]);
 for (t in 2:T){
 mdf[a,t] = normal_rng(A[a] +k[t-1], sig[1]);
 }
-// forecasts for 2012-2022
+// forecasts for 2013-2022
 for (t in 1:F){
 mdf[a,T+t] = normal_rng(A[a] + kf[t],sig[1]);
 }
@@ -70,6 +85,4 @@ for (t in 2:T){
 log_lik[N*(t-1)+a] = normal_lpdf(d[a,t] | A[a] +k[t-1], sig[1]);
 }
 }
-}"
-# this will save the code in the current working directory in a stan file:
-writeLines(model_ln, con = "model_ln.stan" )
+}

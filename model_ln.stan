@@ -12,6 +12,7 @@ real phi; //random walk drift parameter
 real<lower=0> sig[2]; //standard deviations
 // constrained >0
 }
+
 transformed parameters {
 }
 model {
@@ -52,7 +53,7 @@ mdf[a,1] = normal_rng(A[a], sig[1]);
 for (t in 2:T){
 mdf[a,t] = normal_rng(A[a] +k[t-1], sig[1]);
 }
-// forecasts for 2012-2022
+// forecasts for 2013-2022
 for (t in 1:F){
 mdf[a,T+t] = normal_rng(A[a] + kf[t],sig[1]);
 }
