@@ -29,47 +29,8 @@ ltf %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
-  labs(y="log10(mortality rate)",
-       title="Average (over 1921-2022) female mortality")
-
-
-# ltf %>%
-#   mutate(lmx1=log10(mx),
-#          Age=as_factor(Age)) %>%
-#   group_by(Age) %>%
-#   summarise(lmx_age=mean(lmx1)) %>%
-#   ggplot() +
-#   geom_line(aes(x=Age,y=lmx_age, group=1), size=1.2) +
-#   theme_bw() +
-#   theme(axis.text.x = element_text(angle=90, vjust=0.5),
-#         legend.position = "right") +
-#   labs(y="log10(mortality rate)",
-#        title="Average (over 1921-2022) female mortality")
-
-
-# ltf %>%
-#   mutate(lmx1=log10(mx),
-#          Age=as_factor(Age)) %>%
-#   group_by(Year) %>%
-#   summarise(lmx_time=mean(lmx1)) %>%
-#   ggplot() +
-#   geom_line(aes(x=Year,y=lmx_time, group=1), size=1.2) +
-#   theme_bw() +
-#   theme(axis.text.x = element_text(angle=90, vjust=0.5),
-#         legend.position = "right") +
-#   labs(y="log10(mortality rate)",
-#        title="Average (over all age groups) female mortality")
-
-
-
-
-
-
-
-
-
-
-
+  labs(y="log10 (Mortality Rate)",
+       title="Average Female mortality, Canada, 1921-2022")
 
 mort_over_m <-
 ltm %>%
@@ -81,8 +42,8 @@ ltm %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
-  labs(y="log10(mortality rate)",
-       title="Average (over 1921-2022) male mortality")
+  labs(y="log10 (Mortality Rate)",
+       title="Average Male mortality, Canada, 1921-2022")
 
 
 # ltm %>%

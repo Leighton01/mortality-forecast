@@ -4,9 +4,9 @@ library(tidyverse)
 library(viridis)
 library(rstan)
 
-# Load model RDAs
-load(file = "ln_female_model.rda") #fit.mor01
-load(file = "ln_male_model.rda")  #fit.mor01m
+## Load model RDAs
+# load(file = "ln_female_model.rda") #fit.mor01
+# load(file = "ln_male_model.rda")  #fit.mor01m
 load(file = "lc_female_model.rda") #fit.lc01
 load(file = "lc_male_model.rda") #fit.lc01_m
 
@@ -21,6 +21,7 @@ load(file = "sum_lc_m.rda") # sum.lc01_m
 load(file="lt_lc_f.rda")
 load(file="lt_ln_f.rda")
 load(file="lt_lc_m.rda")
+load(file="lt_ln_m.rda")
 
 
 
@@ -43,6 +44,35 @@ lc_ess_f <- plot(fit.lc01, plotfun = "ess",
                  pars = c("mdf","k","kf","A","B","sig","phi"))
 
 
+save(lc_trace_ben_f, file = "lc_trace_ben_f.rda")
+save(lc_trace_mdf_f, file = "lc_trace_mdf_f.rda")
+save(lc_dens_kf_f, file = "lc_dens_kf_f.rda")
+save(lc_rhat_all_f, file = "lc_rhat_all_f.rda")
+save(lc_rhat_mdf_f, file = "lc_rhat_mdf_f.rda")
+save(lc_rhat_ben_f, file = "lc_rhat_ben_f.rda")
+save(lc_ess_f, file = "lc_ess_f.rda")
+
+
+# male
+lc_trace_ben_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("ben"), inc_warmup = F)
+lc_trace_mdf_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("mdf"), inc_warmup = F)
+lc_dens_kf_m <- stan_dens(fit.lc01_m, pars = c("kf"))
+
+lc_rhat_all_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("mdf","k","kf","A","B","sig","phi"))
+lc_rhat_mdf_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("mdf"))
+lc_rhat_ben_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("ben"))
+
+lc_ess_m <- plot(fit.lc01_m, plotfun = "ess",
+                 pars = c("mdf","k","kf","A","B","sig","phi"))
+
+
+save(lc_trace_ben_m, file = "lc_trace_ben_m.rda")
+save(lc_trace_mdf_m, file = "lc_trace_mdf_m.rda")
+save(lc_dens_kf_m, file = "lc_dens_kf_m.rda")
+save(lc_rhat_all_m, file = "lc_rhat_all_m.rda")
+save(lc_rhat_mdf_m, file = "lc_rhat_mdf_m.rda")
+save(lc_rhat_ben_m, file = "lc_rhat_ben_m.rda")
+save(lc_ess_m, file = "lc_ess_m.rda")
 
 
 
@@ -310,50 +340,50 @@ reported_data_m$Age <- as_factor(reported_data_m$Age)
 #   summarise(q10=quantile(ex2,0.1),q50=quantile(ex2,.5),q90=quantile(ex2,.9)) %>%
 #   ungroup()
 
+#
+# lt_ln_m = fit.mor01m %>%
+#   as.data.frame() %>%
+#   select(matches("mdf")) %>%
+#   pivot_longer(cols=everything(),
+#                names_to="Parameter",
+#                values_to="Value") %>%
+#   group_by(Parameter) %>%
+#   mutate(Iteration=row_number(Parameter)) %>%
+#   ungroup() %>%
+#   #some renaming going on here with stringr function str_match
+#   separate(col = Parameter,
+#            into = c("Age","Year"),
+#            sep=",") %>%
+#   mutate(Age=str_match(Age,"\\d+") %>% as_factor() %>% recode(!!!setNames(levels(temp_aux
+#                                                                                  $Age),1:24)),
+#          Year = 1920+as.integer(str_match(Year,"\\d+")),
+#          mx=exp(Value)) %>%
+#   filter(Iteration%in%seq(2,1000,2)) %>%
+#   # and calculating the life table
+#   group_by(Year,Iteration) %>%
+#   mutate(ax = case_when(
+#     Age=="0" ~ 0.053 + 2.8*mx,
+#     Age=="1–4" ~ 1.522-1.518*mx,
+#     Age=="110+" ~ 1/mx,
+#     TRUE ~ 2.5),
+#     n = case_when(
+#       Age=="0" ~ 1,
+#       Age=="1–4" ~ 4,
+#       Age=="110+" ~ 30,
+#       TRUE ~ 5),
+#     lx = lag(cumprod((1-ax*mx)/(1+(n-ax)*mx)), default=1),
+#     Lx = n * lead(lx, default = 0) + (ax*(lx - lead(lx, default = 0))),
+#     Lx = ifelse(Age=="110+",lx/mx,Lx),
+#     ex2 = ifelse(Age=="0",rev(cumsum(rev(Lx))) / lx,0)
+#   ) %>%
+#   ungroup() %>%
+#   group_by(Age,Year) %>%
+#   summarise(q10=quantile(ex2,0.1),q50=quantile(ex2,.5),q90=quantile(ex2,.9)) %>%
+#   ungroup()
 
-lt_ln_m = fit.mor01m %>%
-  as.data.frame() %>%
-  select(matches("mdf")) %>%
-  pivot_longer(cols=everything(),
-               names_to="Parameter",
-               values_to="Value") %>%
-  group_by(Parameter) %>%
-  mutate(Iteration=row_number(Parameter)) %>%
-  ungroup() %>%
-  #some renaming going on here with stringr function str_match
-  separate(col = Parameter,
-           into = c("Age","Year"),
-           sep=",") %>%
-  mutate(Age=str_match(Age,"\\d+") %>% as_factor() %>% recode(!!!setNames(levels(temp_aux
-                                                                                 $Age),1:24)),
-         Year = 1920+as.integer(str_match(Year,"\\d+")),
-         mx=exp(Value)) %>%
-  filter(Iteration%in%seq(2,1000,2)) %>%
-  # and calculating the life table
-  group_by(Year,Iteration) %>%
-  mutate(ax = case_when(
-    Age=="0" ~ 0.053 + 2.8*mx,
-    Age=="1–4" ~ 1.522-1.518*mx,
-    Age=="110+" ~ 1/mx,
-    TRUE ~ 2.5),
-    n = case_when(
-      Age=="0" ~ 1,
-      Age=="1–4" ~ 4,
-      Age=="110+" ~ 30,
-      TRUE ~ 5),
-    lx = lag(cumprod((1-ax*mx)/(1+(n-ax)*mx)), default=1),
-    Lx = n * lead(lx, default = 0) + (ax*(lx - lead(lx, default = 0))),
-    Lx = ifelse(Age=="110+",lx/mx,Lx),
-    ex2 = ifelse(Age=="0",rev(cumsum(rev(Lx))) / lx,0)
-  ) %>%
-  ungroup() %>%
-  group_by(Age,Year) %>%
-  summarise(q10=quantile(ex2,0.1),q50=quantile(ex2,.5),q90=quantile(ex2,.9)) %>%
-  ungroup()
 
 
 
-save(lt_ln_m, file="lt_ln_m.rda")
 
 
 data_m = left_join(lt_lc_m, reported_data_m)
