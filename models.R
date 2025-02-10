@@ -5,8 +5,8 @@ library(viridis)
 library(rstan)
 
 ## Load model RDAs
-# load(file = "ln_female_model.rda") #fit.mor01
-# load(file = "ln_male_model.rda")  #fit.mor01m
+load(file = "ln_female_model.rda") #fit.mor01
+load(file = "ln_male_model.rda")  #fit.mor01m
 load(file = "lc_female_model.rda") #fit.lc01
 load(file = "lc_male_model.rda") #fit.lc01_m
 
@@ -23,7 +23,9 @@ load(file="lt_ln_f.rda")
 load(file="lt_lc_m.rda")
 load(file="lt_ln_m.rda")
 
-
+# rhat
+load(file="lc_rhat_f_values.rda")
+load(file="lc_rhat_m_values_rda")
 
 # LN Convergence ----------------------------------------------------------
 
@@ -31,50 +33,80 @@ load(file="lt_ln_m.rda")
 # Male
 
 # LC Convergence ----------------------------------------------------------
-# Female
-lc_trace_ben_f <- plot(fit.lc01, plotfun = "trace", pars = c("ben"), inc_warmup = F)
-lc_trace_mdf_f <- plot(fit.lc01, plotfun = "trace", pars = c("mdf"), inc_warmup = F)
-lc_dens_kf_f <- stan_dens(fit.lc01, pars = c("kf"))
+# lc_rhat_f <- summary(fit.lc01)$summary[, "Rhat"]
+# save(lc_rhat_f, file="lc_rhat_f_values.rda")
+# Find parameters with Rhat values larger than 1.1
+lc_rhat_f_bad <- lc_rhat_f[lc_rhat_f >= 1.1]
 
-lc_rhat_all_f <- plot(fit.lc01, plotfun = "rhat", pars = c("mdf","k","kf","A","B","sig","phi"))
-lc_rhat_mdf_f <- plot(fit.lc01, plotfun = "rhat", pars = c("mdf"))
-lc_rhat_ben_f <- plot(fit.lc01, plotfun = "rhat", pars = c("ben"))
+# lc_rhat_m <- summary(fit.lc01_m)$summary[, "Rhat"]
+# save(lc_rhat_m, file="lc_rhat_m_values_rda")
+# Find parameters with Rhat values larger than 1.1
+lc_rhat_m_bad <- lc_rhat_m[lc_rhat_m >= 1.1]
 
-lc_ess_f <- plot(fit.lc01, plotfun = "ess",
-                 pars = c("mdf","k","kf","A","B","sig","phi"))
-
-
-save(lc_trace_ben_f, file = "lc_trace_ben_f.rda")
-save(lc_trace_mdf_f, file = "lc_trace_mdf_f.rda")
-save(lc_dens_kf_f, file = "lc_dens_kf_f.rda")
-save(lc_rhat_all_f, file = "lc_rhat_all_f.rda")
-save(lc_rhat_mdf_f, file = "lc_rhat_mdf_f.rda")
-save(lc_rhat_ben_f, file = "lc_rhat_ben_f.rda")
-save(lc_ess_f, file = "lc_ess_f.rda")
+# lc_ESS_f <- summary(fit.lc01)$summary[, "n_eff"]
+# # Find parameters with Rhat values larger than 1.1
+# lc_ESS_f_bad <- rhat_values[lc_ESS_f < 1000]
 
 
-# male
-lc_trace_ben_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("ben"), inc_warmup = F)
-lc_trace_mdf_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("mdf"), inc_warmup = F)
-lc_dens_kf_m <- stan_dens(fit.lc01_m, pars = c("kf"))
 
-lc_rhat_all_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("mdf","k","kf","A","B","sig","phi"))
-lc_rhat_mdf_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("mdf"))
-lc_rhat_ben_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("ben"))
+#
+# # Female
+# lc_trace_ben_f <- plot(fit.lc01, plotfun = "trace", pars = c("ben"), inc_warmup = F)
+# lc_trace_B_f <- plot(fit.lc01, plotfun = "trace", pars = c("B"), inc_warmup = F)
+# lc_trace_mdf_f <- plot(fit.lc01, plotfun = "trace", pars = c("mdf"), inc_warmup = F)
+# lc_trace_mdf_f <- plot(fit.lc01, plotfun = "trace", pars = c("mdf[1,24]","mdf[3,21]",
+#                                                                "mdf[6,18]","mdf[9,15]",
+#                                                                "mdf[12,12]","mdf[15,9]",
+#                                                                "mdf[18,6]","mdf[21,3]",
+#                                                                "mdf[24,1]"), inc_warmup = F)
 
-lc_ess_m <- plot(fit.lc01_m, plotfun = "ess",
-                 pars = c("mdf","k","kf","A","B","sig","phi"))
+# lc_dens_kf_f <- stan_dens(fit.lc01, pars = c("kf"))
+# lc_dens_mdf_f <- stan_dens(fit.lc01, pars = c("mdf"))
 
-
-save(lc_trace_ben_m, file = "lc_trace_ben_m.rda")
-save(lc_trace_mdf_m, file = "lc_trace_mdf_m.rda")
-save(lc_dens_kf_m, file = "lc_dens_kf_m.rda")
-save(lc_rhat_all_m, file = "lc_rhat_all_m.rda")
-save(lc_rhat_mdf_m, file = "lc_rhat_mdf_m.rda")
-save(lc_rhat_ben_m, file = "lc_rhat_ben_m.rda")
-save(lc_ess_m, file = "lc_ess_m.rda")
-
-
+# lc_dens_mdf_f <- stan_dens(fit.lc01, pars = c("mdf[1,24]","mdf[3,21]",
+# "mdf[6,18]","mdf[9,15]",
+# "mdf[12,12]","mdf[15,9]",
+# "mdf[18,6]","mdf[21,3]",
+# "mdf[24,1]"
+# ))
+#
+# lc_rhat_all_f <- plot(fit.lc01, plotfun = "rhat", pars = c("mdf","k","kf","A","B","sig","phi"))
+# lc_rhat_mdf_f <- plot(fit.lc01, plotfun = "rhat", pars = c("mdf"))
+# lc_rhat_kf_f <- plot(fit.lc01, plotfun = "rhat", pars = c("kf"))
+# lc_rhat_ben_f <- plot(fit.lc01, plotfun = "rhat", pars = c("ben"))
+#
+# lc_ess_f <- plot(fit.lc01, plotfun = "ess",
+#                  pars = c("mdf","k","kf","A","B","sig","phi"))
+#
+#
+#
+# # male
+# lc_trace_ben_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("ben"), inc_warmup = F)
+# lc_trace_B_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("B"), inc_warmup = F)
+# lc_trace_mdf_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("mdf"), inc_warmup = F)
+# lc_trace_mdf_m <- plot(fit.lc01_m, plotfun = "trace", pars = c("mdf[1,24]","mdf[3,21]",
+#                                                                "mdf[6,18]","mdf[9,15]",
+#                                                                "mdf[12,12]","mdf[15,9]",
+#                                                                "mdf[18,6]","mdf[21,3]",
+#                                                                "mdf[24,1]"), inc_warmup = F)
+#
+# lc_dens_kf_m <- stan_dens(fit.lc01_m, pars = c("kf"))
+# # lc_dens_mdf_m <- stan_dens(fit.lc01_m, pars = c("mdf"))
+# lc_dens_mdf_m <- stan_dens(fit.lc01_m, pars = c("mdf[1,24]","mdf[3,21]",
+                                                # "mdf[6,18]","mdf[9,15]",
+                                                # "mdf[12,12]","mdf[15,9]",
+                                                # "mdf[18,6]","mdf[21,3]",
+                                                # "mdf[24,1]"
+                                                # ))
+#
+# lc_rhat_all_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("mdf","k","kf","A","B","sig","phi"))
+# lc_rhat_mdf_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("mdf"))
+# lc_rhat_ben_m <- plot(fit.lc01_m, plotfun = "rhat", pars = c("ben"))
+#
+# lc_ess_m <- plot(fit.lc01_m, plotfun = "ess",
+#                  pars = c("mdf","k","kf","A","B","sig","phi"))
+#
+#
 
 
 
@@ -101,7 +133,7 @@ gg_mort_f <- mort_f %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
-  labs(y="log(mortality rate)",
+  labs(y="log10(Mortality Rate)",
        title="Forecasted and Observed Female Mortality for All Age Groups",
        fill="",
        colour="")
@@ -129,7 +161,7 @@ gg_mort_m <- mort_m %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
-  labs(y="log(mortality rate)",
+  labs(y="log10(Mortality Rate)",
        title="Forecasted and Observed Male Mortality for All Age Groups",
        fill="",
        colour="")
@@ -499,4 +531,6 @@ prop_within_lc_f <- mean(between(mort_f$`lmx`, mort_f$`2.5%.y`, mort_f$`97.5%.y`
 prop_within_ln_m <- mean(between(mort_m$`lmx`, mort_m$`2.5%.x`, mort_m$`97.5%.x`))
 prop_within_lc_m <- mean(between(mort_m$`lmx`, mort_m$`2.5%.y`, mort_m$`97.5%.y`))
 
-
+tab_prop <- tibble("Model" = c("LN", "LC"),
+                   "Female" = c(prop_within_ln_f, prop_within_lc_f),
+                   "Male" = c(prop_within_ln_m,prop_within_lc_m))

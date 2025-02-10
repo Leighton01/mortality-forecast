@@ -41,8 +41,16 @@ gg_mort_f
 gg_mort_m
 ```
 
+- forecastts of life expectancy (age v year, median, lc and ln, 4 graphs total)
 
-## Log-Linear Model
+```{r gg_fore_le}
+gg_le_f
+gg_le_m
+```
+
+## Quality of Estimates
+
+### Log-Linear Model
 
 - iSSUE:  Bayesian Fraction of Missing Information was low, increase adapt_delta
 FIXED BY INCREASING adapt_delta FROM 0.97 TO 0.9999 and warm up to 2000
@@ -58,35 +66,64 @@ SHOW GRAPH?????
 - Density plots are smooth and unimodal (unless there are multiple modes in the posterior).
 
 
-## Lee-Carter Model
+### Lee-Carter Model
 - forecast results
 
-### warnings
+### Issues
 for BOTH SEXES 
 -issue: large r-hat(1.53), chains have not mixed (only ben?) 
+No issues of convergence in other priors (average age profile, time effect, autoregression (random walk) parameter, or standard deviations)
+
+Only BEN, but normalized version B is fine.
+
+```{r}
+lc_rhat_f_bad
+lc_rhat_m_bad
+```
+
+No convergence for ben but only ben.
 ```{r}
 lc_trace_ben_f 
 lc_trace_ben_m
+
+
 ```
+
+Convergence of mdf ok *include graph if it runs....
+
+```{r}
+lc_trace_mdf_f
+lc_trace_mdf_m
+```
+
+
+Overall rhat ok
+```{r}
+lc_rhat_all_f
+lc_rhat_all_m
+```
+
 
 -issue: bulk and tail ESS too low, indicating posterior means and medians may be unreliable.
 
-## Quality of Estimates
-- graphs of convergence of each parameter 
-- graph of rhat?
-
-- forecastts of life expectancy (age v year, median, lc and ln, 4 graphs total)
-
-```{r gg_fore_le}
-gg_le_f
-gg_le_m
+```{r}
+lc_ess_f
+lc_ess_m
 ```
 
 
+### Model Comparison
 
-#### compare quality (numbers)
+Using mean of mdf (posterior mort) since it's fiarly symmetrical/normal
 
-Using mean of kf (posterior mort) since it's fiarly symmetrical/normal
+
+```{r}
+lc_dens_mdf_f
+lc_dens_mdf_m
+```
+
+
+#### Errors
 
 ```{r}
 
@@ -98,16 +135,28 @@ tab_mape
 
 ```
 
+The LC model has smaller Mean Error (ME), indicating more balanced forecasts, while the LN model shows a slight overestimation of mortality rates.
 
-using the 95% credible interval (columns 2.5% and 97.5% ), calculate the proportion of observed
-mortality rates in 2010-2019 that fall within the predictive intervals of the forecasts. Compare these
-measures between log-linear and Lee-Carter models.
+The LC model demonstrates better precision with smaller Mean Absolute Error (MAE) and Root Mean Square Error (RMSE) values, indicating more consistent and reliable predictions compared to the LN model.
+
+The LC model has smaller Mean Percentage Error (MPE) and Mean Absolute Percentage Error (MAPE) values, suggesting more accurate forecasts in relative terms, while the LN model underestimates mortality rates substantially.
+
+Summary
+The LC model consistently outperforms the LN model across all error metrics, especially in terms of accuracy and precision (MAE, RMSE, and MAPE).
+The LN model's larger mean and percentage errors suggest it struggles with both bias and variance in its forecasts, producing less reliable mortality predictions for both sexes.
+For both males and females, the LC model provides a more accurate and stable forecast, making it the more effective model for predicting mortality rates in the given period. The LN model's high MAPE and MAE suggest that it may not capture certain dynamics in the data as well as the LC model, particularly when considering relative forecast errors.
+
+
+#### Accuracy 
+
+using the 95% credible interval (columns 2.5% and 97.5% ), the proportion of observed mortality rates in 2013-2022 that fall within the predictive intervals of the forecasts are as follows
+
+For both sexes, the Linear Log (LN) model consistently outperforms the Lee-Carter (LC) model in terms of the proportion of observed mortality rates within the predictive interval. Specifically, for females, 80.4% of the observed mortality rates fall within the predictive interval of the LN model, compared to 78.3% for the LC model. In the case of males, the difference is even more pronounced, with 71.7% of observed mortality rates falling within the predictive interval of the LN model, while the LC model only captures 55% of the observed data within its interval. This suggests that the LN model provides more accurate and reliable forecasts for both sexes, particularly for males.
+
+The Lee-Carter (LC) model shows less accuracy, particularly for males, where its predictive interval captures a significantly lower proportion of observed mortality rates. This discrepancy may be due to the inherent limitations of the LC model, which focuses on age-specific mortality trends and temporal changes in mortality rates but may not capture all variations in mortality behavior, especially in more recent periods where shifts in health trends may not align with the model's assumptions. In contrast, the LN model, which uses a simpler approach based on a log transformation of mortality rates, appears to be more robust across both sexes, offering better calibration for the observed data. This comparison highlights the potential for the LN model to be more reliable when forecasting mortality rates in the given context.
 
 ```{r}
-prop_within_ln_f
-prop_within_lc_f
-prop_within_ln_m
-prop_within_lc_m
+tab_prop
 ```
 
 # Challenges (40%)

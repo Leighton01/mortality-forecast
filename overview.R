@@ -30,7 +30,7 @@ ltf %>%
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
   labs(y="log10 (Mortality Rate)",
-       title="Average Female mortality, Canada, 1921-2022")
+       title="Average Female Mortality, Canada, 1921-2022")
 
 mort_over_m <-
 ltm %>%
@@ -43,7 +43,7 @@ ltm %>%
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
   labs(y="log10 (Mortality Rate)",
-       title="Average Male mortality, Canada, 1921-2022")
+       title="Average Male Mortality, Canada, 1921-2022")
 
 
 # ltm %>%
