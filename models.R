@@ -125,18 +125,25 @@ mort_f <- ltf %>%
 
 gg_mort_f <- mort_f %>%
   ggplot() +
-  # geom_ribbon(aes(x=Year,ymin=`2.5%`,ymax=`97.5%`,fill="95% PI", group=1),alpha=0.25) +
+  geom_ribbon(aes(x=Year,ymin=`2.5%.x`,ymax=`97.5%.x`,
+                  fill="LN 95% PI"),alpha=0.25) +
+  geom_ribbon(aes(x=Year,ymin=`2.5%.y`,ymax=`97.5%.y`,
+                  fill="LC 95% PI"),alpha=0.25) +
   geom_line(aes(x=Year,y=`50%.x`, group=1, colour="LN Forecast"), size=1.2) +
   geom_line(aes(x=Year,y=`50%.y`, group=1, colour="LC Forecast"), size=1.2) +
-  geom_line(aes(x=Year,y=lmx, group=1, colour="Observed"), size=1.2) +
+  geom_line(aes(x=Year,y=lmx, group=1, colour="Observed"), size=1.2)+
+  scale_color_manual("", values = c("tomato","dodgerblue3","gray18")) +
+  scale_fill_manual("",values=c("tomato", "dodgerblue3")) +
   facet_grid(.~Age,) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
   labs(y="log10(Mortality Rate)",
-       title="Forecasted and Observed Female Mortality for All Age Groups",
+       x="Year",
+       title="Forecasted and Observed Female Mortality for All Age Groups, 2013-2022",
        fill="",
-       colour="")
+       colour="")+
+  scale_x_continuous(breaks = c())
 
 mort_f
 gg_mort_f
@@ -153,18 +160,24 @@ mort_m <- ltm %>%
 
 gg_mort_m <- mort_m %>%
   ggplot() +
-  # geom_ribbon(aes(x=Year,ymin=`2.5%`,ymax=`97.5%`,fill="95% PI", group=1),alpha=0.25) +
+  geom_ribbon(aes(x=Year,ymin=`2.5%.x`,ymax=`97.5%.x`,
+                  fill="LN 95% PI"),alpha=0.25) +
+  geom_ribbon(aes(x=Year,ymin=`2.5%.y`,ymax=`97.5%.y`,
+                  fill="LC 95% PI"),alpha=0.25) +
   geom_line(aes(x=Year,y=`50%.x`, group=1, colour="LN Forecast"), size=1.2) +
   geom_line(aes(x=Year,y=`50%.y`, group=1, colour="LC Forecast"), size=1.2) +
   geom_line(aes(x=Year,y=lmx, group=1, colour="Observed"), size=1.2) +
+  scale_color_manual("", values = c("tomato","dodgerblue3","gray18")) +
+  scale_fill_manual("",values=c("tomato", "dodgerblue3")) +
   facet_grid(.~Age,) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=90, vjust=0.5),
         legend.position = "right") +
   labs(y="log10(Mortality Rate)",
-       title="Forecasted and Observed Male Mortality for All Age Groups",
+       title="Forecasted and Observed Male Mortality for All Age Groups, 2013-2022",
        fill="",
-       colour="")
+       colour="")+
+  scale_x_continuous(breaks = c())
 
 mort_m
 gg_mort_m
@@ -288,28 +301,27 @@ data = left_join(lt_lc, reported_data)
 data <- left_join(lt_ln, data, join_by(Age, Year))
 
 gg_le_f <- ggplot(filter(data, Age=="0")) +
-  geom_line(aes(x=Year,y=q50.x, colour="LC Median"), size=0.8) +
-  geom_line(aes(x=Year,y=q50.y, colour="LN Median"), size=0.8) +
-  geom_line(aes(x=Year,y=ex1, colour="Reported"), size=0.8) +
+  geom_line(aes(x=Year,y=q50.x, colour="LC Median"), size=1.2) +
+  geom_line(aes(x=Year,y=q50.y, colour="LN Median"), size=1.2) +
+  geom_line(aes(x=Year,y=ex1, colour="Observed"), size=1.2) +
   labs(color = "", fill = "")+
   geom_ribbon(aes(x=Year,ymin=q10.x,ymax=q90.x, fill="LC 80% CI"),alpha=0.3) +
   geom_ribbon(aes(x=Year,ymin=q10.y,ymax=q90.y, fill="LN 80% CI"),alpha=0.3) +
   geom_vline(xintercept = 2013, linetype="dashed", colour="gray18") +
-  annotate("text", x = 2008, y = 70, label = "2013", angle = 90)+
-  scale_x_continuous(expand = c(0,0)) +
-  ylim(50, 90)+
-  xlim(1921, 2022)+
+  annotate("text", x = 2011.5, y = 70, label = "2013", angle = 90)+
+  scale_x_continuous() +
+  coord_cartesian(xlim = c(1921, 2022), ylim = c(50, 100), expand = FALSE)+
   scale_color_manual("", values = c("tomato","dodgerblue3","gray18")) +
   scale_fill_manual("",values=c("tomato", "dodgerblue3")) +
-  labs(y="Age", title = "Female Life Expectancy, Canada")
+  labs(y="Age", title = "Forecasted and Observed Female Life Expectancy, 1921-2022")
 
 
 # Male
 
-temp_aux = ltm %>% filter(Year>1920 & Year<2013) %>%
-  #log rates
-  mutate(lmx=log(mx),
-         Age=as_factor(Age))
+# temp_aux = ltm %>% filter(Year>1920 & Year<2013) %>%
+#   #log rates
+#   mutate(lmx=log(mx),
+#          Age=as_factor(Age))
 
 reported_data_m = filter(ltm, Year>1920) %>%
   group_by(Year) %>%
@@ -422,20 +434,19 @@ data_m = left_join(lt_lc_m, reported_data_m)
 data_m <- left_join(lt_ln_m, data, join_by(Age, Year))
 
 gg_le_m <- ggplot(filter(data_m, Age=="0")) +
-  geom_line(aes(x=Year,y=q50.x, colour="LC Median"), size=0.8) +
-  geom_line(aes(x=Year,y=q50.y, colour="LN Median"), size=0.8) +
-  geom_line(aes(x=Year,y=ex1, colour="Reported"), size=0.8) +
+  geom_line(aes(x=Year,y=q50.x, colour="LC Median"), size=1.2) +
+  geom_line(aes(x=Year,y=q50.y, colour="LN Median"), size=1.2) +
+  geom_line(aes(x=Year,y=ex1, colour="Observed"), size=1.2) +
   labs(color = "", fill = "")+
   geom_ribbon(aes(x=Year,ymin=q10.x,ymax=q90.x, fill="LC 80% CI"),alpha=0.3) +
   geom_ribbon(aes(x=Year,ymin=q10.y,ymax=q90.y, fill="LN 80% CI"),alpha=0.3) +
   geom_vline(xintercept = 2013, linetype="dashed", colour="gray18") +
-  annotate("text", x = 2008, y = 70, label = "2013", angle = 90)+
-  scale_x_continuous(expand = c(0,0)) +
-  ylim(50, 90)+
-  xlim(1921, 2022)+
+  annotate("text", x = 2011.5, y = 70, label = "2013", angle = 90)+
+  scale_x_continuous() +
+  coord_cartesian(xlim = c(1921, 2022), ylim = c(50, 100), expand = FALSE)+
   scale_color_manual("", values = c("tomato","dodgerblue3","gray18")) +
   scale_fill_manual("",values=c("tomato", "dodgerblue3")) +
-  labs(y="Age", title = "Male Life Expectancy, Canada")
+  labs(y="Age", title = "Forecasted and Observed Male Life Expectancy, 1921-2022")
 
 # Life Expectancy Error -------------------------------------------------------------------
 
@@ -497,26 +508,39 @@ lc_mape_m <- mean(abs((valid_m$lmx - valid_m$mean.y) / valid_m$lmx)) * 100
 
 # Make tables of errors
 # FIX AFTER MALE IS DONE!
-tab_me <- tibble("Model" = c("LN", "LC"),
+tab_me <- data.frame("Model" = c("LN", "LC"),
                  "Female" = c(ln_me_f, lc_me_f),
                  "Male" = c(ln_me_m,lc_me_m))
 
 
-tab_mpe <- tibble("Model" = c("LN", "LC"),
+tab_mpe <- data.frame("Model" = c("LN", "LC"),
                   "Female" = c(ln_mpe_f, lc_mpe_f),
                   "Male" = c(ln_mpe_m,lc_mpe_m))
 
-tab_mae <- tibble("Model" = c("LN", "LC"),
+tab_mae <- data.frame("Model" = c("LN", "LC"),
                   "Female" = c(ln_mae_f, lc_mae_f),
                   "Male" = c(ln_mae_m,lc_mae_m))
 
-tab_rmse <- tibble("Model" = c("LN", "LC"),
+tab_rmse <- data.frame("Model" = c("LN", "LC"),
                    "Female" = c(ln_rmse_f, lc_rmse_f),
                    "Male" = c(ln_rmse_m,lc_rmse_m))
 
-tab_mape <- tibble("Model" = c("LN", "LC"),
+tab_mape <- data.frame("Model" = c("LN", "LC"),
                    "Female" = c(ln_mape_f, lc_mape_f),
                    "Male" = c(ln_mape_m,lc_mape_m))
+
+
+error <- cbind(tab_me, tab_mae[,2:3])
+error <- data.frame(sapply(error, function(x) if(is.numeric(x)) round(x, 3) else x))
+colnames(error) <- c("Model", "ME Female", "ME Male", "MAE Female", "MAE Male")
+
+
+error_perc <- cbind(tab_mpe, tab_mape[,2:3])
+error_perc <- data.frame(sapply(error_perc, function(x) if(is.numeric(x)) round(x, 3) else x))
+colnames(error_perc) <- c("Model", "MPE Female", "MPE Male", "MAPE Female", "MAPE Male")
+
+
+tab_rmse <- data.frame(sapply(tab_rmse, function(x) if(is.numeric(x)) round(x, 3) else x))
 
 
 # using the 95% credible interval (columns 2.5% and 97.5% ), calculate the proportion of observed
@@ -531,6 +555,7 @@ prop_within_lc_f <- mean(between(mort_f$`lmx`, mort_f$`2.5%.y`, mort_f$`97.5%.y`
 prop_within_ln_m <- mean(between(mort_m$`lmx`, mort_m$`2.5%.x`, mort_m$`97.5%.x`))
 prop_within_lc_m <- mean(between(mort_m$`lmx`, mort_m$`2.5%.y`, mort_m$`97.5%.y`))
 
-tab_prop <- tibble("Model" = c("LN", "LC"),
+tab_prop <- data.frame("Model" = c("LN", "LC"),
                    "Female" = c(prop_within_ln_f, prop_within_lc_f),
                    "Male" = c(prop_within_ln_m,prop_within_lc_m))
+tab_prop <- data.frame(sapply(tab_prop, function(x) if(is.numeric(x)) round(x, 3) else x))

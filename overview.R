@@ -4,20 +4,22 @@ library(viridis)
 
 options(scipen = 999)
 
-#female lifetable per 5x1, every year in 5y age groups
-ltf <- readHMDweb(CNTRY = "CAN",
-                      item = "fltper_5x1",
-                      username = "leighton.d@live.com",
-                      password = "mFAT^L9^es34",
-                      fixup = FALSE)
-
-
-#male lifetable per 5x1
-ltm <- readHMDweb(CNTRY = "CAN",
-                      item = "mltper_5x1",
-                      username = "leighton.d@live.com",
-                      password = "mFAT^L9^es34",
-                      fixup = FALSE)
+load(file="ltf.rda")
+load(file="ltm.rda")
+# #female lifetable per 5x1, every year in 5y age groups
+# ltf <- readHMDweb(CNTRY = "CAN",
+#                       item = "fltper_5x1",
+#                       username = "leighton.d@live.com",
+#                       password = "mFAT^L9^es34",
+#                       fixup = FALSE)
+#
+#
+# #male lifetable per 5x1
+# ltm <- readHMDweb(CNTRY = "CAN",
+#                       item = "mltper_5x1",
+#                       username = "leighton.d@live.com",
+#                       password = "mFAT^L9^es34",
+#                       fixup = FALSE)
 
 mort_over_f <-
 ltf %>%

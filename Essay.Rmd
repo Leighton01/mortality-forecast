@@ -6,15 +6,17 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.align='center')
 
 library(tidyverse)
 library(HMDHFDplus)
 library(viridis)
 library(rstan)
+library(knitr)
+library(kableExtra)
+library(tinytex)
 
-source('overview.R')
-source('models.R')
+source('load_tab.R')
 ```
 
 
@@ -22,10 +24,15 @@ source('models.R')
 
 The graphs show mortality trends for males and females in Canada from 1921 to 2022, with mortality rates measured in log10 scale. For both sexes, mortality is highest in infancy and early childhood, as indicated by the steep dip at age 0 and then a gradual increase starting from early adulthood. In males, mortality consistently increases with age, with a noticeable uptick in middle adulthood, particularly post-50. The mortality rate for males also shows a marked upward trend after 60, peaking around 100 years old. For females, the trend follows a similar pattern, but the rate of increase with age is slightly less pronounced compared to males, especially in younger and middle adulthood.
 
-```{r setup}
+```{r overview_f, out.width="100%"}
 
-mort_over_f
-mort_over_m
+knitr::include_graphics("Graphs/Overview_Female.png") # mort_over_f
+
+```
+
+```{r overview_m, out.width="100%"}
+
+knitr::include_graphics("Graphs/Overview_Male.png") # mort_over_m
 
 ```
 
@@ -36,16 +43,30 @@ Over time, mortality for both sexes has decreased significantly, particularly fr
 I'm using 1921 to 2012 as training data, and 2013-2022 as test. 2011-13 is roughly when the first wave of babyboomer retires. 75% would be until ~1998, ok for long term, but may not capture recent shifts, so decided 2013.
 
 forecasts of all age groups compared to actual
-```{r gg_fore_mort}
-gg_mort_f
-gg_mort_m
+```{r mort_f, out.width="100%"}
+
+knitr::include_graphics("Graphs/forecast_mort_f.png")
+
+```
+
+```{r mort_m, out.width="100%"}
+
+knitr::include_graphics("Graphs/forecast_mort_m.png")
+
 ```
 
 - forecastts of life expectancy (age v year, median, lc and ln, 4 graphs total)
 
-```{r gg_fore_le}
-gg_le_f
-gg_le_m
+```{r le_f, out.width="100%"}
+
+knitr::include_graphics("Graphs/forecast_le_m.png")
+
+```
+
+```{r le_m, out.width="100%"}
+
+knitr::include_graphics("Graphs/forecast_le_m.png")
+
 ```
 
 ## Quality of Estimates
@@ -74,41 +95,55 @@ for BOTH SEXES
 -issue: large r-hat(1.53), chains have not mixed (only ben?) 
 No issues of convergence in other priors (average age profile, time effect, autoregression (random walk) parameter, or standard deviations)
 
-Only BEN, but normalized version B is fine.
-
-```{r}
-lc_rhat_f_bad
-lc_rhat_m_bad
-```
-
-No convergence for ben but only ben.
-```{r}
-lc_trace_ben_f 
-lc_trace_ben_m
-
-
-```
-
-Convergence of mdf ok *include graph if it runs....
-
-```{r}
-lc_trace_mdf_f
-lc_trace_mdf_m
-```
 
 
 Overall rhat ok
-```{r}
-lc_rhat_all_f
-lc_rhat_all_m
+```{r lc_rhat, out.width="100%"}
+
+knitr::include_graphics("Graphs/lc_rhat_f.png")# lc_rhat_all_f
+# knitr::include_graphics("Graphs/lc_rhat_m.png")
+
 ```
 
 
+Only ben has large rhat. 
+```{r lc_rhat_ben, out.width="100%"}
+knitr::include_graphics("Graphs/lc_rhat_ben_f.png")
+# knitr::include_graphics("Graphs/lc_rhat_ben_m.png")
+```
+
+normalized version B is fine.
+```{r lc_b, out.width="100%"}
+knitr::include_graphics("Graphs/lc_b_f.png")
+# knitr::include_graphics("Graphs/lc_b_m.png")
+```
+
+
+
+No convergence for ben but only ben.
+```{r lc_ben, out.width="100%"}
+
+knitr::include_graphics("Graphs/lc_ben_f.png") # lc_trace_ben_f 
+# knitr::include_graphics("Graphs/lc_ben_m.png") # lc_trace_ben_m
+
+```
+
+Convergence of mdf ok 
+
+```{r mdf_trace, out.width="100%", fig.cap="Sample trace graphs of mdf."}
+
+knitr::include_graphics("Graphs/lc_trace_mdf_f.png") # lc_trace_mdf_f
+# knitr::include_graphics("Graphs/lc_trace_mdf_m.png") 
+
+```
+
 -issue: bulk and tail ESS too low, indicating posterior means and medians may be unreliable.
 
-```{r}
-lc_ess_f
-lc_ess_m
+```{r lc_ess, out.width="100%"}
+
+knitr::include_graphics("Graphs/lc_ess_f.png") # lc_ess_f
+# knitr::include_graphics("Graphs/lc_ess_m.png") # lc_ess_m
+
 ```
 
 
@@ -116,28 +151,38 @@ lc_ess_m
 
 Using mean of mdf (posterior mort) since it's fiarly symmetrical/normal
 
+```{r mdf_dens_ln, out.width="48%"}
 
-```{r}
-lc_dens_mdf_f
-lc_dens_mdf_m
+knitr::include_graphics("Graphs/ln_dens_mdf_f.png") # ln_dens_mdf_f
+
+```
+
+```{r mdf_dens_lc, out.width="48%"}
+
+knitr::include_graphics("Graphs/lc_dens_mdf_f.png") # lc_dens_mdf_f
+# knitr::include_graphics("Graphs/lc_dens_mdf_m.png") # lc_dens_mdf_m
+
 ```
 
 
 #### Errors
 
-```{r}
+```{r mean_err}
 
-tab_me
-tab_mpe
-tab_mae
+error
 tab_rmse
-tab_mape
 
 ```
 
 The LC model has smaller Mean Error (ME), indicating more balanced forecasts, while the LN model shows a slight overestimation of mortality rates.
 
 The LC model demonstrates better precision with smaller Mean Absolute Error (MAE) and Root Mean Square Error (RMSE) values, indicating more consistent and reliable predictions compared to the LN model.
+
+```{r error_perc}
+
+error_perc
+
+```
 
 The LC model has smaller Mean Percentage Error (MPE) and Mean Absolute Percentage Error (MAPE) values, suggesting more accurate forecasts in relative terms, while the LN model underestimates mortality rates substantially.
 
@@ -155,9 +200,12 @@ For both sexes, the Linear Log (LN) model consistently outperforms the Lee-Carte
 
 The Lee-Carter (LC) model shows less accuracy, particularly for males, where its predictive interval captures a significantly lower proportion of observed mortality rates. This discrepancy may be due to the inherent limitations of the LC model, which focuses on age-specific mortality trends and temporal changes in mortality rates but may not capture all variations in mortality behavior, especially in more recent periods where shifts in health trends may not align with the model's assumptions. In contrast, the LN model, which uses a simpler approach based on a log transformation of mortality rates, appears to be more robust across both sexes, offering better calibration for the observed data. This comparison highlights the potential for the LN model to be more reliable when forecasting mortality rates in the given context.
 
-```{r}
+```{r acc_prop}
+
 tab_prop
+
 ```
+
 
 # Challenges (40%)
 ## short-term (5y)
