@@ -123,14 +123,21 @@ mort_f <- ltf %>%
   left_join(sum.lc01,by = join_by(Year, Age))
 
 
+#
+# temp <- mort_f[,c("Year", '50%.x', "Age")]
+# temp %>% filter(Age == 80) %>% ggplot(aes(y = `50%.x`, x=Year))+
+#   geom_line()
+
+
+
 gg_mort_f <- mort_f %>%
   ggplot() +
   geom_ribbon(aes(x=Year,ymin=`2.5%.x`,ymax=`97.5%.x`,
                   fill="LN 95% PI"),alpha=0.25) +
   geom_ribbon(aes(x=Year,ymin=`2.5%.y`,ymax=`97.5%.y`,
                   fill="LC 95% PI"),alpha=0.25) +
-  geom_line(aes(x=Year,y=`50%.x`, group=1, colour="LN Forecast"), size=1.2) +
-  geom_line(aes(x=Year,y=`50%.y`, group=1, colour="LC Forecast"), size=1.2) +
+  geom_line(aes(x=Year,y=`50%.x`, group=1, colour="LN Forecast"), size=0.8) +
+  geom_line(aes(x=Year,y=`50%.y`, group=1, colour="LC Forecast"), size=0.8) +
   geom_line(aes(x=Year,y=lmx, group=1, colour="Observed"), size=1.2)+
   scale_color_manual("", values = c("tomato","dodgerblue3","gray18")) +
   scale_fill_manual("",values=c("tomato", "dodgerblue3")) +
