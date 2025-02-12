@@ -1,12 +1,13 @@
 ---
-title: "Essay"
-author: '11484265'
-date: "`r Sys.Date()`"
+title: "Challenges and Approaches in Bayesian Mortality Forecasting in Canada"
+subtitle: 'SOST70063 Demographic Forecasting 2024-25'
+author: 'Student ID: 11484265'
+date: "Word count: 2320"
 output: pdf_document
 ---
 
 \pagenumbering{arabic}
-
+\newpage
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, fig.align='center')
@@ -30,9 +31,9 @@ source('load_tab.R')
 
 \newpage 
 
-# Overview 
+# Introduction
 
-The effectiveness of the log-linear (LN) and Lee-Carter (LC) models in forecasting mortality trends in Canada is evaluated and compared. Sourcing from the Human Mortality Database (2025), data from 1921 to 2012 are used for training, while data from 2013 to 2022 are used for testing. The analysis focuses the strengths and limitations of each model in capturing patterns and predicting future mortality rates.
+The effectiveness of mortality forecasting models plays a critical role in demographic analysis. Two widely used models for this purpose are the log-linear (LN) model and the Lee-Carter (LC) model. By applying these models to Canadian mortality data (HMD, 2025), their ability to capture mortality trends for females and males will be compared. Through an examination of model performance metrics, such as error rates and forecast accuracy, this analysis aims to identify the strengths and limitations of each model in projecting future mortality rates. 
 
 ```{r overview_f, out.width="100%", fig.cap="Female mortality over the years across age groups."}
 
@@ -40,7 +41,7 @@ knitr::include_graphics("Graphs/Overview_Female.png") # mort_over_f
 
 ```
 
-Figure 1 displays a typical mortality pattern, where modern times consistently show lower mortality rates in logarithmic terms. Newborn mortality, as expected, is higher than that of children over one year old. The mortality rate for 1-4-year-olds shows a downward trend until around age 10, after which it gradually increases with age. The slope from 0 to 1 year old is steeper in modern times. The narrower band near the beginning and end suggests that improvements in mortality have been most prominent in middle childhood. In older age groups, mortality rates are similar and almost overlap, indicating little significant improvement in mortality at advanced ages.
+Figure 1 displays a typical mortality pattern, where modern times consistently show lower mortality rates in logarithmic terms. Newborn mortality, as expected, is higher than that of children over one-year old. The mortality rate for 1 to 4-year-olds shows a downward trend until around age 10, after which it gradually increases with age. The slope from 0 to 1 year old is steeper in modern times. The narrower band near the beginning and end suggests that improvements in mortality have been most prominent in middle childhood. In older age groups, mortality rates are similar and almost overlap, indicating little significant improvement in mortality at advanced ages.
 
 \newpage
 
@@ -58,17 +59,17 @@ Over time, mortality rates for both sexes have significantly decreased, indicati
 
 # Forecast
 
-Both the LN and LC models are used to forecast mortality rates and life expectancy. 1921 to 2012 is used as training data, and 2013-2022 as test. 2011-13 is roughly when the first wave of babyboomer retires. 75% would be until ~1998, ok for long term, but may not capture recent shifts, so decided 2013.
+Both the LN and LC models are applied to forecast mortality rates and life expectancy, with data from 1921 to 2012 serving as the training set and 2013-2022 as the test period. The years 2011-2013 mark the approximate retirement of the first wave of baby boomers, and while data up to around 1998 captures long-term trends effectively for model training purposes, it may not fully account for recent shifts. Therefore, the decision was made to use 2013 as the starting point for testing.
 
 ## Mortality Rates
+
 ```{r mort_f, out.width="100%", fig.cap="Forecasted female mortality rates of LN and LC models compared to observed values.", results = 'asis'}
 
 knitr::include_graphics("Graphs/forecast_mort_f.png")
 
 ```
 
-
-In the forecasts for female mortality, both the LN and LC models predict a clear trend of decreasing mortality rates over time, aligning with the observed data. For younger age groups, both models capture the significant decline in mortality, especially in infancy and childhood, with slight differences in the magnitude of the predicted decline. However, in middle and older age groups, the predictions from both models tend to converge, and both models struggle to capture finer details of mortality improvements. In particular, the LN model shows a stronger trend toward lower mortality for younger adults compared to the LC model, which may reflect the LN model's simpler approach and its less nuanced treatment of age-specific mortality. Overall, both models predict a general decline in mortality, but the LC model appears more sensitive to recent shifts in mortality trends, especially for older age groups.
+In the forecasts for female mortality, both the LN and LC models predict a clear trend of decreasing mortality rates over time, consistent with the observed data. For younger age groups, both models capture the significant decline in mortality, but fail to reflect the recent upward tick. In the 15-40 age range, neither model captures the upward trend seen in the observed data. Both models struggle to account for finer details in mortality improvements and fluctuations. However, the LC model is more sensitive to shifts in the data, aligning more closely with the observed trends, particularly for older age groups.
 
 \newpage
 
@@ -78,8 +79,9 @@ knitr::include_graphics("Graphs/forecast_mort_m.png")
 
 ```
 
+For male mortality, the forecasts show a general decline over time, but the provide more similar forecast values for ages 15 and 35 compared to the female forecasts. The LC model generally provides more accurate forecasts across age groups, particularly for older ages. Similar to the female data, the LC model’s forecasts for males are less consistent in certain age ranges, especially for those aged 15-30.
 
-For male mortality, the forecasts also show a general decline over time, but with a more pronounced drop at younger adult ages compared to females, which is consistent with the observed data. Both the LN and LC models predict a continued increase in mortality as age advances, with the highest mortality rates occurring in older adults. The LN model provides a smoother forecast across age groups, while the LC model better captures fluctuations in mortality, especially at later ages. However, like the female data, the LC model's forecasts are less consistent for males in certain age ranges, particularly for those aged 15-30, where the LN model offers more accurate and reliable predictions. In summary, while both models predict a reduction in male mortality, the LC model's performance is slightly less reliable in the younger age groups, suggesting it may not fully capture certain health trends in this population.
+Neither model performs particularly well in predicting the test period (2013 and onward) when considering all age groups. Overall, both models struggle to capture the nuances in the test data, suggesting that improvements may be needed for more accurate predictions.
 
 \newpage
 
@@ -91,7 +93,8 @@ knitr::include_graphics("Graphs/forecast_le_m.png")
 
 ```
 
-In the life expectancy forecasts for females, both the LN and LC models predict a steady increase in life expectancy over time, reflecting overall improvements in mortality rates. The forecasts align closely with the observed data, with both models capturing the general upward trend in life expectancy. However, the LN model appears to have a more nuanced prediction, particularly in the later years, suggesting it is more sensitive to recent mortality improvements. The LC model, while still capturing the general trend, appears to smooth out some of the finer variations observed in the data.
+In the life expectancy forecasts for females, both the LN and LC models predict a steady increase over time, reflecting overall improvements in mortality rates. The forecasts align closely with the observed data, with both models capturing the general upward trend in life expectancy. However, the LN model appears to offer a more nuanced prediction, particularly in the early years, suggesting it is more sensitive to mortality changes. This increased sensitivity may, however, come at the cost of overfitting, as the model seems to react too strongly to short-term fluctuations in the data, potentially misrepresenting broader trends. In contrast, while the LC model captures the general trend, it appears to smooth out some of the finer variations observed in the data.
+
 
 \newpage
 
@@ -101,25 +104,23 @@ knitr::include_graphics("Graphs/forecast_le_m.png")
 
 ```
 
+For males, the life expectancy forecasts show a similar upward trajectory, with both models predicting a significant improvement over time. However, the LN model slightly underestimates life expectancy in the early and later years, while overestimating it between 1940 and 1960. In contrast, the LC model consistently overestimates life expectancy across the entire period, indicating a potential bias toward more optimistic forecasts.
 
-For males, the life expectancy forecasts show a similar upward trajectory. Both models predict a significant improvement in life expectancy, but the LN model appears to slightly underestimate this increase, particularly for the earliest and most recent years. The LC model consistently overestimates life expectancy. 
-
-
-While both models provide reasonable forecasts for both sexes, the LN model better captures the dynamics of mortality improvements in recent years, making it a more accurate tool for forecasting male life expectancy over time.
+Forecast values for the test data (2013 and onward) show that the LN model is closer to the observed data, but it still fails to capture the recent downward tick in life expectancy, similar to the LC model. Overall, both models demonstrate limitations in accurately predicting recent trends, indicating the need for model adjustments or alternative approaches.
 
 \newpage
 
-## Quality of Estimates
+## Modelling Issues
 
 ### Log-Linear Model
 
-The LN model initially encountered a few issues related to Bayesian convergence and effective sampling, which are critical for obtaining reliable posterior estimates. Specifically, the Bayesian Fraction of Missing Information (BFMI) was low, suggesting that the model had not explored the parameter space effectively during sampling. This often indicates difficulties in convergence or that the sampling procedure is inefficient. A low BFMI can lead to biased posterior distributions, meaning that the model might not have accurately captured the true relationships in the data. Additionally, the R-hat value for the LN model was high, reaching 1.06. In Bayesian inference, R-hat values close to 1 indicate that the chains have mixed well and converged to the same posterior distribution. An R-hat greater than 1.1 generally signals potential convergence problems. High R-hat values indicate that the chains may not have fully explored the parameter space, potentially leading to inaccurate inferences. Bulk Effective Sample Size (ESS) and Tail ESS were also too low, which suggests that the number of independent samples from the posterior distribution was insufficient. Low ESS values mean that the posterior estimates are not well-supported by the data, making the results less reliable.
+The LN model faced issues with Bayesian convergence and sampling efficiency, as indicated by a low Bayesian Fraction of Missing Information (BFMI), suggesting ineffective exploration of the parameter space. This can lead to biased posterior distributions. Additionally, the R-hat value was high (1.06), signaling potential convergence problems, and both the Bulk Effective Sample Size (ESS) and Tail ESS were too low, indicating insufficient independent samples and making the posterior estimates less reliable.
 
-These issues were addressed by increasing the adapt_delta parameter from 0.97 to 0.9999, which improves the accuracy of the sampling algorithm by reducing step sizes and thus allowing for better exploration of the parameter space. Additionally, the warmup period was extended to 2000 iterations, allowing the model to adapt more thoroughly before starting the sampling process. Furthermore, the number of iterations was increased from 1500 to 6000, and the number of chains was increased to four, which enhanced the mixing of the chains and ensured better convergence. These steps helped to reduce R-hat and improve the ESS values, leading to more reliable posterior estimates.
+These issues were addressed by increasing the target average proposal acceptance probability (adapt_delta) from 0.97 to 0.9999, improving sampling accuracy by reducing step sizes for better exploration of the parameter space. The warmup period was extended to 2000 iterations, allowing the model to adapt more thoroughly by refining parameter estimates before sampling begins. Additionally, increasing the number of iterations from 1500 to 6000 and the number of chains to four enhanced convergence by providing multiple independent starting points. These adjustments helped increase BFMI, reduce R-hat, and improve ESS values, resulting in more reliable posterior estimates.
 
 ### Lee-Carter Model
 
-The LC model faced an issue related to model convergence. R-hat values larger than 1.53 were observed. This suggests that the chains for certain parameters had not fully converged, and thus, their posterior distributions might not have been well-explored. Poor convergence can lead to unreliable parameter estimates, affecting the validity of the model's predictions. 
+The LC model encountered convergence issues, with R-hat values exceeding 1.53, indicating that the chains for certain parameters had not fully converged. As a result, the posterior distributions for these parameters may not have been adequately explored, potentially leading to unreliable estimates and compromising the validity of the model's predictions.
 
 ```{r lc_ben, out.width="80%", fig.cap="Trace graphs of unnormarlized changes of age profile."}
 
@@ -128,8 +129,7 @@ knitr::include_graphics("Graphs/lc_ben_f.png") # lc_trace_ben_f
 
 ```
 
-
-However, upon closer inspection, this does not pose to be a serious issue since it's only the the unnormalized changes in the age profile that is not converging, as seen in figure 7. 
+However, upon closer inspection, it becomes clear that this does not present a significant issue, as it is only the unnormalized changes in the age profile that are failing to converge, as shown in Figure 7.
 
 \newpage
 
@@ -138,7 +138,7 @@ knitr::include_graphics("Graphs/lc_b_f.png")
 # knitr::include_graphics("Graphs/lc_b_m.png")
 ```
 
-The normalized changes in the age profile, which is what's actually used in the model, shows good convergence.
+The normalized changes in the age profile, which are utilized in the model instead of the unnormalized counterpart, demonstrate good convergence.
 
 ```{r mdf_trace, out.width="50%", fig.cap="Sample trace graphs of mortality rates."}
 
@@ -147,7 +147,7 @@ knitr::include_graphics("Graphs/lc_trace_mdf_f.png") # lc_trace_mdf_f
 
 ```
 
-Mortality rates show good convergence. 
+The posterior for mortality rates also demonstrates good convergence, as shown in Figure 9.
 
 ```{r lc_rhat, out.width="50%", fig.cap="R-hat values across all parameters."}
 
@@ -156,31 +156,22 @@ knitr::include_graphics("Graphs/lc_rhat_f.png")# lc_rhat_all_f
 
 ```
 
-The r-hat values across all parameters are distributed near 1. 
+The R-hat values for all other parameters are close to 1, indicating that the chains have converged and mixed effectively and have explored the parameter space adequately.
 
 \newpage
 
-### Model Comparison
+## Model Evaluation
 
-Since the distributions of the posterior (mortality rates) of each model are fairly symmetrical, the means are used for calculating model accuracy.
-
-<!-- ```{r mdf_dens, out.width="45%", fig.cap="Select density graphs of female mortality rates for LN and LC models, respectively."} -->
-
-<!-- knitr::include_graphics("Graphs/ln_dens_mdf_f.png") # ln_dens_mdf_f -->
-<!-- knitr::include_graphics("Graphs/lc_dens_mdf_f.png") # lc_dens_mdf_f -->
-
-<!-- ``` -->
-
-<!-- Various errors are calculated. -->
+Since the posterior distributions of mortality rates for each model are approximately symmetrical and unimodal, the means are utilized for calculating errors and model accuracy.
 
 ```{r mean_err}
 
 error
-tab_rmse
+error_rmse
 
 ```
 
-The LC model has smaller Mean Error (ME), indicating more balanced forecasts, while the LN model shows a slight overestimation of mortality rates. The LC model demonstrates better precision with smaller Mean Absolute Error (MAE) and Root Mean Square Error (RMSE) values, indicating more consistent and reliable predictions compared to the LN model.
+The LC model has a smaller mean error (ME), indicating more balanced forecasts, while the LN model shows a slight overestimation of mortality rates. The LC model demonstrates better precision with smaller mean absolute error (MAE) and root mean square error (RMSE) values, indicating more consistent and reliable predictions compared to the LN model.
 
 ```{r error_perc}
 
@@ -188,7 +179,7 @@ error_perc
 
 ```
 
-The LC model has smaller Mean Percentage Error (MPE) and Mean Absolute Percentage Error (MAPE) values, suggesting more accurate forecasts in relative terms, while the LN model underestimates mortality rates substantially.
+The LC model has smaller mean percentage error (MPE) and mean absolute percentage error (MAPE), suggesting more accurate forecasts in relative terms, while the LN model underestimates mortality rates substantially.
 
 
 Overall, the LC model consistently outperforms the LN model across all error metrics, especially in terms of accuracy and precision (MAE, RMSE, and MAPE). The LN model's larger mean and percentage errors suggest it struggles with both bias and variance in its forecasts, producing less reliable mortality predictions for both sexes. For both males and females, the LC model provides a more accurate and stable forecast, making it the more effective model for predicting mortality rates in the given period. The LN model's high MAPE and MAE suggest that it may not capture certain dynamics in the data as well as the LC model, particularly when considering relative forecast errors.
@@ -200,10 +191,9 @@ tab_prop
 
 ```
 
-For both sexes, the LN model consistently outperforms the LC model in terms of the proportion of observed mortality rates within the predictive interval. Specifically, for females, 80.4% of the observed mortality rates fall within the predictive interval of the LN model, compared to 78.3% for the LC model. In the case of males, the difference is even more pronounced, with 71.7% of observed mortality rates falling within the predictive interval of the LN model, while the LC model only captures 55% of the observed data within its interval. This suggests that the LN model provides more accurate and reliable forecasts for both sexes, particularly for males.
+However, when it comes to accuracy within the 95% predictive interval, the LN model consistently outperforms the LC model for both sexes. In males particularly, the difference is more pronounced, with 71.7% of accuracy for the LN model, while the LC model only captures 55% of the observed data within its interval.
 
-The LC model shows less accuracy, particularly for males, where its predictive interval captures a significantly lower proportion of observed mortality rates. This discrepancy may be due to the inherent limitations of the LC model, which focuses on age-specific mortality trends and temporal changes in mortality rates but may not capture all variations in mortality behavior, especially in more recent periods where shifts in health trends may not align with the model's assumptions. In contrast, the LN model, which uses a simpler approach based on a log transformation of mortality rates, appears to be more robust across both sexes, offering better calibration for the observed data. This comparison highlights the potential for the LN model to be more reliable when forecasting mortality rates in the given context.
-
+The LN model's higher mean error and mean absolute error suggest that, on average, its predictions are further from the observed values compared to the LC model. However, its higher accuracy within the predictive interval indicates that, despite larger errors in individual predictions, the model is better at capturing the overall range or distribution of possible outcomes. This could imply that the model's predictions are more robust within the expected range, even if it struggles with outliers or extreme values. In conclusion, the LN model may be less precise on average but does a better job of predicting mortality within the expected bounds of variation.
 
 \newpage 
 
@@ -211,14 +201,9 @@ The LC model shows less accuracy, particularly for males, where its predictive i
 
 ## Disasters
 
-Short-term mortality data can be volatile due to factors such as seasonal diseases, natural disasters, and economic shifts. This volatility makes it challenging to distinguish between random fluctuations and underlying trends, leading to uncertainties in short-term mortality forecasts.
+Short-term mortality data can be volatile due to factors such as seasonal diseases, natural disasters, and economic shifts. This volatility makes it challenging to distinguish between random fluctuations and underlying trends. For instance, the 2016 wildfires in Fort McMurray, Alberta led to temporary but significant increases in deaths, particularly among vulnerable populations like the elderly or those with pre-existing health conditions. These events can skew mortality data, making it harder to distinguish between the impact of the disaster itself and the usual mortality patterns of the population. Similarly, the COVID-19 pandemic has had a direct impact on life expectancy in Canada, particularly in 2020, leading to significant reductions in expected lifespans and influencing both short-term and long-term mortality forecasts (Dion, 2021). This is evident in the performance of both models in this essay, which fail to capture the downward shift in life expectancy or the sudden upward trend in mortality observed in recent years. The inability of these models to incorporate the effects of such a large, unforeseen event highlights a key limitation in their forecasting ability, especially when faced with sudden disruptions to mortality patterns.
 
-For instance, the 2016 wildfires in Fort McMurray, Alberta led to temporary but significant increases in deaths, particularly among vulnerable populations like the elderly or those with pre-existing health conditions. These events can skew mortality data in the short term, making it harder to distinguish between the impact of the disaster itself and the usual mortality patterns of the population. Similarly, the COVID-19 pandemic has direct associations with reductions in life expectancy in Canada in 2020, affecting both short-term and long-term forecasts (Dion, 2021). 
-
-While Bayesian inference is well-suited to handling uncertainty and allows for the continuous update of predictions as new information becomes available, one challenge here is the specification of prior distributions. If historical mortality data includes periods of frequent natural disasters or other catastrophic events, the priors may need to be adjusted to account for these outliers. For instance, a prior distribution based on average mortality data might not fully capture the spike in mortality that occurs immediately after a natural disaster. Bayesian models must therefore incorporate this uncertainty about the potential impact of rare events. This can be done by specifying a heavy-tailed prior, such as a Student’s t-distribution, which allows for occasional large deviations from the typical mortality rates. 
-
-Another difficulty in updating the model with Bayesian inference arises from distinguishing between these temporary fluctuations and long-term trends. For example, a large spike in mortality following a major natural disaster may require a complex model update, as the Bayesian process has to differentiate whether this change is due to a random fluctuation or represents a significant shift in underlying mortality patterns. Given the relatively short duration of such events, models must ensure that these spikes do not unduly influence long-term mortality forecasts, especially when forecasting using data like the linear log or Lee-Carter models that focus on long-term mortality trends.
-
+While Bayesian inference is well-suited to handling uncertainty and allows for the continuous update of predictions as new information becomes available, one challenge here is the specification of prior distributions. If historical mortality data includes periods of frequent natural disasters or other catastrophic events, the priors may need to be adjusted to account for these outliers. For instance, a prior distribution based on average mortality data might not fully capture the spike in mortality that occurs immediately after a natural disaster. Heavy-tailed priors can be selected to address this issue, as they improve robustness and maintain flexibility for rare events, but they also increase model complexity and computation time, with a risk of overfitting.
 
 ## Immigration
 
@@ -226,11 +211,11 @@ The recent increase in immigration (Statistics Canada, 2024) to Canada affects m
 
 However, the impact of immigration on mortality forecasting is not entirely straightforward. Immigrants from different regions may have distinct health profiles, with factors such as socio-economic status, access to healthcare, and lifestyle playing significant roles in their mortality rates. They may experience better health outcomes initially due to the Healthy Immigrant Effect (Kennedy et al., 2014), but could see these outcomes converge with the Canadian average over time as they adapt to their new environment. These health transitions can further complicate long-term mortality predictions, as models must account for the dynamic nature of immigrant health profiles.
 
-In Bayesian inference, this requires careful modeling of prior distributions that incorporate these cohort-specific effects. The prior must allow for shifts in mortality rates over time as immigrant cohorts adjust to Canadian lifestyles, access to healthcare, and socio-economic factors. This is particularly challenging in the Lee-Carter model, which decomposes mortality into age, time, and cohort effects. The model must account for the fact that mortality rates for immigrants may not follow the same patterns as the general population, leading to a misalignment in the expected trends for certain age groups. Incorporating this shifting trend requires careful specification of the priors and the use of hierarchical modeling, where different groups (e.g., native-born vs. immigrant populations) are modeled separately before being combined into a unified forecast.
+Again, this requires careful modeling of prior distributions that incorporate these cohort-specific effects. The prior must allow for shifts in mortality rates over time as immigrant cohorts adjust to Canadian lifestyles, access to healthcare, and socio-economic factors. This means mortality rates for immigrants may not follow the same patterns as the general population, leading to a misalignment in the expected trends for certain age groups. One possible solution may be initially modelling different groups (e.g., native-born vs. immigrant populations) separately before being combined into a unified forecast.
 
-Another challenge is model overfitting. To mitigate overfitting, regularization techniques like shrinkage priors such as Gaussian priors can be employed, which penalize extreme parameter estimates and help maintain generalizable predictions. Additionally, careful selection of hyperparameters (such as the variance of the priors) may reduce the risk of overfitting. However, this may not be as well suited for when the aforementitioned situations of disaster spikes in mortality.
+In conclusion, Bayesian mortality forecasting offers a powerful framework for predicting long-term trends, but it faces significant challenges when incorporating factors like natural disasters and immigration trends. Addressing these challenges through careful prior selection, model regularization, and efficient computational methods is essential to improving the accuracy and reliability in the Canadian context.
 
-The computational complexity is another hurdle, especially with high-dimensional data or frequent updates. the process can become computationally expensive. Updating the model each time new data is available can be computationally intensive with methods such as Markov chain Monte Carlo, particularly when dealing with large datasets and multiple sources of uncertainty. 
+\newpage
 
 # References
 
