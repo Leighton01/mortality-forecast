@@ -32,8 +32,7 @@ source('load_tab.R')
 
 # Overview 
 
-This essay evaluates and compares the effectiveness of the log-linear (LN) and Lee-Carter (LC) models in forecasting mortality trends in Canada. Using 1921 to 2012 as training data and 2013 to 2022 as a test period, the analysis highlights the strengths and limitations of each model in capturing patterns and predicting future mortality rates.
-
+The effectiveness of the log-linear (LN) and Lee-Carter (LC) models in forecasting mortality trends in Canada is evaluated and compared. Sourcing from the Human Mortality Database (2025), data from 1921 to 2012 are used for training, while data from 2013 to 2022 are used for testing. The analysis focuses the strengths and limitations of each model in capturing patterns and predicting future mortality rates.
 
 ```{r overview_f, out.width="100%", fig.cap="Female mortality over the years across age groups."}
 
@@ -210,21 +209,36 @@ The LC model shows less accuracy, particularly for males, where its predictive i
 
 # Challenges
 
-## Short-term
+## Disasters
 
 Short-term mortality data can be volatile due to factors such as seasonal diseases, natural disasters, and economic shifts. This volatility makes it challenging to distinguish between random fluctuations and underlying trends, leading to uncertainties in short-term mortality forecasts.
 
-For instance, the 2016 wildfires in Fort McMurray, Alberta led to temporary but significant increases in deaths, particularly among vulnerable populations like the elderly or those with pre-existing health conditions. These events can skew mortality data in the short term, making it harder to distinguish between the impact of the disaster itself and the usual mortality patterns of the population. Similarly, the COVID-19 pandemic has introduced significant fluctuations in mortality rates, complicating short-term projections. The Office of the Chief Actuary (OCA) notes that while long-term mortality projections emphasize historical trends, recent events like the pandemic can disrupt these patterns, affecting both short-term and long-term forecasts. 
+For instance, the 2016 wildfires in Fort McMurray, Alberta led to temporary but significant increases in deaths, particularly among vulnerable populations like the elderly or those with pre-existing health conditions. These events can skew mortality data in the short term, making it harder to distinguish between the impact of the disaster itself and the usual mortality patterns of the population. Similarly, the COVID-19 pandemic has direct associations with reductions in life expectancy in Canada in 2020, affecting both short-term and long-term forecasts (Dion, 2021). 
 
 While Bayesian inference is well-suited to handling uncertainty and allows for the continuous update of predictions as new information becomes available, one challenge here is the specification of prior distributions. If historical mortality data includes periods of frequent natural disasters or other catastrophic events, the priors may need to be adjusted to account for these outliers. For instance, a prior distribution based on average mortality data might not fully capture the spike in mortality that occurs immediately after a natural disaster. Bayesian models must therefore incorporate this uncertainty about the potential impact of rare events. This can be done by specifying a heavy-tailed prior, such as a Student’s t-distribution, which allows for occasional large deviations from the typical mortality rates. 
 
 Another difficulty in updating the model with Bayesian inference arises from distinguishing between these temporary fluctuations and long-term trends. For example, a large spike in mortality following a major natural disaster may require a complex model update, as the Bayesian process has to differentiate whether this change is due to a random fluctuation or represents a significant shift in underlying mortality patterns. Given the relatively short duration of such events, models must ensure that these spikes do not unduly influence long-term mortality forecasts, especially when forecasting using data like the linear log or Lee-Carter models that focus on long-term mortality trends.
 
 
-## Long-term
+## Immigration
 
-The recent increase in immigration to Canada affects mortality forecasting in several ways, particularly in the short term and long term. In the short term, the influx of younger immigrants, who generally have lower mortality rates, can result in an overall reduction in the country's mortality rate. This shift is because younger individuals, particularly those arriving through skilled worker programs, typically have lower mortality risks compared to the broader population. As a result, forecasting models must adjust for the changing age distribution in the population, as the higher number of younger individuals dilutes the impact of mortality in older age groups.
+The recent increase in immigration (Statistics Canada, 2024) to Canada affects mortality forecasting in several ways. In the short term, the influx of younger immigrants, who generally have lower mortality rates, can result in an overall reduction in the country's mortality rate. This shift is because younger individuals, particularly those arriving through skilled worker programs, typically have lower mortality risks compared to the broader population. As a result, forecasting models must adjust for the changing age distribution in the population, as the higher number of younger individuals dilutes the impact of mortality in older age groups.
 
-However, the impact of immigration on mortality forecasting is not entirely straightforward. Immigrants from different regions may have distinct health profiles, with factors such as socio-economic status, access to healthcare, and lifestyle playing significant roles in their mortality rates. For instance, immigrants from Southeast Asia or the Middle East may experience better health outcomes initially due to the Healthy Immigrant Effect, but could see these outcomes converge with the Canadian average over time as they adapt to their new environment. These health transitions can further complicate long-term mortality predictions, as models must account for the dynamic nature of immigrant health profiles.
+However, the impact of immigration on mortality forecasting is not entirely straightforward. Immigrants from different regions may have distinct health profiles, with factors such as socio-economic status, access to healthcare, and lifestyle playing significant roles in their mortality rates. They may experience better health outcomes initially due to the Healthy Immigrant Effect (Kennedy et al., 2014), but could see these outcomes converge with the Canadian average over time as they adapt to their new environment. These health transitions can further complicate long-term mortality predictions, as models must account for the dynamic nature of immigrant health profiles.
 
 In Bayesian inference, this requires careful modeling of prior distributions that incorporate these cohort-specific effects. The prior must allow for shifts in mortality rates over time as immigrant cohorts adjust to Canadian lifestyles, access to healthcare, and socio-economic factors. This is particularly challenging in the Lee-Carter model, which decomposes mortality into age, time, and cohort effects. The model must account for the fact that mortality rates for immigrants may not follow the same patterns as the general population, leading to a misalignment in the expected trends for certain age groups. Incorporating this shifting trend requires careful specification of the priors and the use of hierarchical modeling, where different groups (e.g., native-born vs. immigrant populations) are modeled separately before being combined into a unified forecast.
+
+Another challenge is model overfitting. To mitigate overfitting, regularization techniques like shrinkage priors such as Gaussian priors can be employed, which penalize extreme parameter estimates and help maintain generalizable predictions. Additionally, careful selection of hyperparameters (such as the variance of the priors) may reduce the risk of overfitting. However, this may not be as well suited for when the aforementitioned situations of disaster spikes in mortality.
+
+The computational complexity is another hurdle, especially with high-dimensional data or frequent updates. the process can become computationally expensive. Updating the model each time new data is available can be computationally intensive with methods such as Markov chain Monte Carlo, particularly when dealing with large datasets and multiple sources of uncertainty. 
+
+# References
+
+HMD. Human Mortality Database. Max Planck Institute for Demographic Research (Germany), University of California, Berkeley (USA), and French Institute for Demographic Studies (France). Available at www.mortality.org (Accessed: Feb 11 2025). 
+
+Dion, P. (2021). Reductions in Life expectancy directly associated with COVID-19 in 2020, Demographic documents Statistics Canada. Available at: https://www150.statcan.gc.ca/n1/pub/91f0015m/91f0015m2021002-eng.htm (Accessed: Feb 11 2025).
+
+Statistics Canada. (2024). Table 17-10-0014-01 Estimates of the components of international migration, by age and gender, annual [Data table]. https://doi.org/10.25318/1710001401-eng
+
+Kennedy, S., Kidd, M. P., McDonald, J. T., & Biddle, N. (2014). The Healthy Immigrant Effect: Patterns and evidence from four countries. Journal of International Migration and Integration, 16(2), 317–332. doi:10.1007/s12134-014-0340-x.
+
